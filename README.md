@@ -10,7 +10,7 @@ to write and manage architectural docs*
   - user stories
   - usecases
 
-- how to define architecture
+- how to define architecture for modules (modules must be independent of each other)
   - features
   - functional requirements
   - non-functional requirements
