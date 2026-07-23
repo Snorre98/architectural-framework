@@ -5,7 +5,15 @@ to write and manage architectural docs*
 
 ----
 
+- how to define modules
+  - epics
+  - user stories
+  - usecases
+
 - how to define architecture
+  - features
+  - functional requirements
+  - non-functional requirements
 
 - how to define implementaion plan
 
