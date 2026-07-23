@@ -13,11 +13,16 @@ to write and manage architectural docs*
 
 - how to define reasonable test plans
 
+- codereview
+
 ----
 
-
 - re-producable format and dir
+
 - local LLM first
 
+- RAG
+
+- MCP
 
 ----
