@@ -7,6 +7,8 @@ to write and manage architectural docs*
 
 - how to define architecture
 
+- how to define implementaion plan
+
 - how to define reasonable test plans
 
 - how to implement architectural plans
