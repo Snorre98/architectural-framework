@@ -21,7 +21,7 @@ to write and manage architectural docs*
 
 - local LLM first
 
-- RAG
+- tools for RAGing .md , building on semantic code RAG implemenation
 
 - MCP
 
