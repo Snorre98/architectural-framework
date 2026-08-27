@@ -1,38 +1,71 @@
 # architect-toolkit
 
-*toolkit (actaul tools) for efficiently allowing local LLMs
-to write and manage architectural docs*
+A reusable toolkit for **defining proper architectural systems before developing
+them** — the methods, strategies, templates, and the interactive `define-architecture`
+agent that produces the docs for you.
 
-----
+Everything is docs-as-code: diagrams and decisions version with the repo, no
+tooling gate, local-first. The methodology generalizes the documentation
+framework first worked out in the
+[deep-research](https://github.com) project (arc42 + C4 + ADR + Gherkin +
+contracts + traceability), extended with the SEI "Documenting Software
+Architectures" theory (quality attributes, scenarios, tactics, patterns).
 
-- how to define modules
-  - epics
-  - user stories
-  - usecases
+## What's here
 
-- how to define architecture for modules (modules must be independent of each other)
-  - features
-  - functional requirements
-  - non-functional requirements
+| Path | Purpose |
+|---|---|
+| `docs/framework.md` | The single, shared documentation framework (the layered stack + process rule) |
+| `docs/standards-mapping.md` | Maps every arc42 section to SEI viewtypes and ISO/IEC/IEEE 42010 |
+| `docs/sei-theory.md` | Quality attributes, general scenarios, tactics, patterns, views (SEI) |
+| `templates/` | Blank, reusable skeletons: arc42, ADR, Gherkin, traceability, contracts |
+| `skills/define-architecture/` | The interactive agent (opencode skill) that drives the whole process |
 
-- how to define implementaion plan
+## The method in one page
 
-- how to define reasonable test plans
+Each system documents its architecture with a layered stack, each layer
+answering one question, under `docs/<system>/`:
 
-- how to implement architectural plans
+1. `architecture.md` — **arc42** skeleton (all 12 sections) + **C4** as Mermaid
+2. `adr/` — **Nygard-format ADRs** (immutable decision records)
+3. `behaviors/*.feature` — **Gherkin** executable behavior contracts
+4. `contracts/` — precise data/interface/state/failure/concurrency contracts
+5. `traceability.md` — matrix mapping ADRs → arc42 → behaviors → contracts
 
-- how to define reasonable test plans
+**Process rule:** every architectural change = new ADR → update the arc42
+sections it touches. Diagrams are Mermaid until a Structurizr DSL migration
+earns its keep.
 
-- codereview
+See `docs/framework.md` for the full statement.
 
-----
+## Using the agent
 
-- re-producable format and dir
+The `define-architecture` skill is an interactive agent installed globally into
+opencode (see below). In any project, say:
 
-- local LLM first
+> define the architecture for a <thing you're about to build>
 
-- tools for RAGing .md , building on semantic code RAG implemenation
+The agent interviews you (stakeholders, quality goals, constraints, decisions),
+then scaffolds and fills `docs/<system>/` in the current repo, following the
+process rule above.
 
-- MCP
+### Installing the skill
 
-----
+The skill source lives in `skills/define-architecture/`. It is surfaced to
+opencode by symlinking it into the skills directory managed by your
+[OpencodeConfig](https://github.com) repo, then running its `install.sh`:
+
+```bash
+ln -sfn /Users/snorresaether/Documents/Liv/Projects/architect-toolkit/skills/define-architecture \
+  /Users/snorresaether/Documents/Liv/Projects/OpencodeConfig/MattPSkills/opencode-fork/define-architecture
+/Users/snorresaether/Documents/Liv/Projects/OpencodeConfig/install.sh
+```
+
+Restart opencode afterwards.
+
+## Principles
+
+- **Local LLM first** — no cloud dependency to produce the docs.
+- **Reproducible format and directory layout** — one convention across every project.
+- **Architecture before code** — decisions are cheap to change as documents, expensive as code.
+- **Traceability** — every decision, section, and behavior contract is cross-linked.
