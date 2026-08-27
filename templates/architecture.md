@@ -32,6 +32,7 @@ arc42 skeleton, 12 sections. Related: [ADR log](adr/), [behavioral contracts](be
 
 | Constraint | Source |
 |---|---|
+| Follows the base model: compact modules, sealed by default, cross-module access only via defined public APIs (`base-model.md`); deviation requires an ADR | Framework |
 | | |
 
 ## 3. Context & Scope
@@ -64,17 +65,24 @@ flowchart TB
 
 ### 5.2 Component view (C4 L3)
 
+<!-- Each component is a compact module. Its "Public API" is the only surface
+     other modules may depend on; everything else is private. -->
+
 ```mermaid
 flowchart TB
     subgraph System[<System>]
         C1[Component 1]
         C2[Component 2]
     end
+    C1 -->|public API| C2
 ```
 
-| Component | Responsibility | Detail |
-|---|---|---|
-| | | |
+| Component | Responsibility | Public API | Hidden internals |
+|---|---|---|---|
+| | | | |
+
+<!-- Module dependency graph (public-API-only, acyclic) is specified in
+     contracts/module-boundaries.md. -->
 
 ### 5.3 Code level (C4 L4)
 
@@ -112,6 +120,7 @@ flowchart TB
 
 | Concept | Approach |
 |---|---|
+| Module sealing / public APIs | every module sealed by default; cross-module access only via defined public APIs — `contracts/module-boundaries.md` (base model) |
 | | |
 
 <!-- Precise, normative specs for cross-cutting mechanisms live in contracts/. -->
@@ -150,7 +159,8 @@ flowchart TD
 The documentation set is complete when:
 
 - No `TBD` / placeholder text remains anywhere.
-- Every ADR appears in the §9 index.
+- Every ADR appears in the §9 index (0001 = base model: affirmed or deviated).
+- Every module has a documented public API in `contracts/module-boundaries.md` (base model).
 - Every §10.2 quality scenario links a Gherkin behavior contract (see traceability.md).
 - Cross-cutting mechanisms have a precise contract in `contracts/` and are linked from §8.
 - ADR decisions are traceable to arc42 sections, behaviors, and contracts (traceability.md).

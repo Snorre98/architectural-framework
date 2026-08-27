@@ -16,20 +16,32 @@ Architectures" theory (quality attributes, scenarios, tactics, patterns).
 | Path | Purpose |
 |---|---|
 | `docs/framework.md` | The single, shared documentation framework (the layered stack + process rule) |
+| `docs/base-model.md` | The required base architectural model: compact modules + public APIs |
 | `docs/standards-mapping.md` | Maps every arc42 section to SEI viewtypes and ISO/IEC/IEEE 42010 |
 | `docs/sei-theory.md` | Quality attributes, general scenarios, tactics, patterns, views (SEI) |
 | `templates/` | Blank, reusable skeletons: arc42, ADR, Gherkin, traceability, contracts |
 | `skills/define-architecture/` | The interactive agent (opencode skill) that drives the whole process |
+
+## The base model (required)
+
+Every system is a set of **compact modules**, each **sealed by default**: its
+features are private, and the only way another module can use them is through a
+deliberately defined **public API** (a narrow, stable set of operations — the
+Fowler *service layer*). Dependencies point inward and are acyclic; leaf
+modules hold pure logic. This is required by default — deviating requires an
+ADR. See `docs/base-model.md`.
 
 ## The method in one page
 
 Each system documents its architecture with a layered stack, each layer
 answering one question, under `docs/<system>/`:
 
+0. **base model** — compact modules + public APIs (required by default; see above)
 1. `architecture.md` — **arc42** skeleton (all 12 sections) + **C4** as Mermaid
 2. `adr/` — **Nygard-format ADRs** (immutable decision records)
 3. `behaviors/*.feature` — **Gherkin** executable behavior contracts
-4. `contracts/` — precise data/interface/state/failure/concurrency contracts
+4. `contracts/` — precise data/interface/state/failure/concurrency contracts,
+   including `module-boundaries.md` (every module's public API)
 5. `traceability.md` — matrix mapping ADRs → arc42 → behaviors → contracts
 
 **Process rule:** every architectural change = new ADR → update the arc42
@@ -68,4 +80,5 @@ Restart opencode afterwards.
 - **Local LLM first** — no cloud dependency to produce the docs.
 - **Reproducible format and directory layout** — one convention across every project.
 - **Architecture before code** — decisions are cheap to change as documents, expensive as code.
+- **Sealed modules** — modules expose only deliberately defined public APIs; everything else is private.
 - **Traceability** — every decision, section, and behavior contract is cross-linked.

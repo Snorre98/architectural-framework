@@ -2,7 +2,29 @@
 
 The method this skill applies: a layered, docs-as-code documentation framework
 generalized from the `deep-research` project, extended with SEI "Documenting
-Software Architectures" theory.
+Software Architectures" theory. A required base model — **compact modules +
+public APIs** — sits under everything (layer 0).
+
+## 0. Base model: compact modules + public APIs (required)
+
+A system is a set of **compact modules**, each **sealed by default**: its
+features are private. The only way another module can use them is through a
+deliberately defined **public API** — a narrow, stable set of operations
+(Fowler *service layer*) that hides the domain + data beneath it.
+
+Rules (normative):
+- **R1 — Sealed by default.** Nothing is cross-module usable unless listed in
+  the module's public API.
+- **R2 — Explicit public API.** Deliberately defined, narrow, stable.
+- **R3 — Public-API-only dependencies.** Never reach into internals (types,
+  tables, state, files).
+- **R4 — Inward, acyclic.** Leaf modules hold pure/deterministic logic.
+- **R5 — Test at the boundary.** Exercise modules through their public API.
+- **R6 — Contracted.** Each public API is a precise contract.
+
+Required-by-default: deviating requires an ADR (ADR-0001) recording the reason
+and alternative. **Probe during the interview:** "for each module — what is its
+public API? everything else is private."
 
 ## 1. The framework (per system)
 
@@ -12,7 +34,7 @@ answering one question, under `docs/<system>/`:
 1. `architecture.md` — **arc42** skeleton (12 sections) + **C4** as Mermaid.
 2. `adr/` — **Nygard ADRs**, immutable, numbered per system.
 3. `behaviors/*.feature` — **Gherkin** executable contracts.
-4. `contracts/` — precise data/interface/state/failure/concurrency contracts.
+4. `contracts/` — `module-boundaries` (base model) + data/interface/state/failure/concurrency contracts.
 5. `traceability.md` — matrix: ADR → arc42 → behavior → contract.
 
 **Process rule:** every architectural change = new ADR → update the arc42
@@ -56,6 +78,7 @@ ADR, never edit an accepted one; number restarts per system.
 
 | Contract | Covers |
 |---|---|
+| `module-boundaries` | every module, its public API (defined operations), hidden internals, and the acyclic public-API-only dependency graph (base model) |
 | `data-model` | durable data formats: schemas, column types, invariants |
 | `interface` | the seam between two parts: signatures, shapes, errors, invariants |
 | `state-machine` | states (phase/condition/terminal), transitions, invariants |
@@ -101,5 +124,8 @@ service). See the full tactics reference in the toolkit's `docs/sei-theory.md`.
 ## 7. Definition of Done
 
 The documentation set is complete when there is no `TBD`/placeholder, every ADR
-appears in §9, every §10.2 scenario links a behavior contract, cross-cutting
-mechanisms have a contract, and the traceability matrix is complete.
+appears in §9 (ADR-0001 = base model affirmed or deviated), every module has a
+documented public API in `contracts/module-boundaries.md` with no cross-module
+dependency reaching outside one, every §10.2 scenario links a behavior
+contract, cross-cutting mechanisms have a contract, and the traceability matrix
+is complete.

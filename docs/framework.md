@@ -8,6 +8,14 @@ layered stack, each layer answering one question, under `docs/<system>/`.
 It generalizes the framework first worked out in the `deep-research` project
 (originally recorded as `docs/engine/adr/0001-architecture-documentation-framework.md`).
 
+## Base architectural model
+
+Every system follows a required base model: **compact modules + public APIs**
+(sealed by default, cross-module access only through deliberately defined
+public APIs). See [`base-model.md`](base-model.md). It is required by default —
+a system that deviates must record the deviation in an ADR. The base model is
+the "layer 0" the rest of the stack documents.
+
 ## The stack
 
 1. `<system>/architecture.md` — **arc42** skeleton (all 12 sections, distilled),
@@ -19,7 +27,8 @@ It generalizes the framework first worked out in the `deep-research` project
 3. `<system>/behaviors/*.feature` — **Gherkin** contracts for deterministic
    behavior (acceptance criteria, executable).
 4. `<system>/contracts/` — **precise contracts** (the exact data/interface/
-   state shapes the behavior features and ADRs reference).
+   state shapes the behavior features and ADRs reference), including
+   `module-boundaries.md` — the per-system record of every module's public API.
 5. `<system>/traceability.md` — the matrix mapping ADRs → arc42 sections →
    behaviors → contracts (and, where relevant, acceptance criteria).
 

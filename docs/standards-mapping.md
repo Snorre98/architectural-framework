@@ -5,6 +5,15 @@ viewtypes ("Views & Beyond") and ISO/IEC/IEEE 42010 concepts. Each system's
 `architecture.md` carries this mapping in its appendices; this file is the
 single source the skill emits from.
 
+## Base model → SEI
+
+The required base model ("compact modules + public APIs", `base-model.md`)
+maps to the SEI **module** viewtype in the **decomposition** + **layered**
+styles: modules are code/data units, the public API is each module's interface,
+and the inward-acyclic dependency rule is the layering constraint. Its runtime
+manifestation (service calls across public APIs) is the **component-and-connector**
+viewtype, with the public API as the connector.
+
 ## ISO/IEC/IEEE 42010 — architecture description
 
 | 42010 concept | Where in the framework |

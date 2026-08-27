@@ -1,6 +1,6 @@
 ---
 name: define-architecture
-description: Define a software system's architecture before building it, producing a complete docs-as-code set (arc42 + C4, Nygard ADRs, Gherkin behavior contracts, precise contracts, traceability matrix) through an interactive interview. Use when user wants to define, design, or document the architecture of a new system, service, library, or subsystem — or mentions arc42, ADR, architecture definition, "architect this", or "design before coding".
+description: Define a software system's architecture before building it, producing a complete docs-as-code set (arc42 + C4, Nygard ADRs, Gherkin behavior contracts, precise contracts, traceability matrix) through an interactive interview, with compact modules exposing only defined public APIs as the required base model. Use when user wants to define, design, or document the architecture of a new system, service, library, or subsystem — or mentions arc42, ADR, architecture definition, modules, public API, service layer, "architect this", or "design before coding".
 ---
 
 # Define Architecture
@@ -22,7 +22,9 @@ docs-as-code set under `docs/<system>/`. Follow the documentation framework in
    - Stakeholders and their expectations
    - Top-5 quality goals, each as a measurable Gherkin-style scenario
    - Constraints (platform, scale, tech, non-negotiable)
-   - Functional areas / components and their responsibilities
+   - **Modules and their public APIs** — for each module: what concern does it
+     own, what is its public API (the deliberately defined operations others may
+     call), and what does it hide? Everything not in a public API is private.
    - The first architectural decisions (one ADR each) and their alternatives
    - Quality-attribute scenarios (probe with the SEI tactics reference)
 
@@ -34,21 +36,29 @@ docs-as-code set under `docs/<system>/`. Follow the documentation framework in
    ├── architecture.md      # arc42 (12 sections) + Appendices A/B, C4 as Mermaid
    ├── adr/                 # Nygard ADRs, numbered 0001…
    ├── behaviors/           # *.feature (Gherkin)
-   ├── contracts/           # data-model / interface / state-machine / failure-semantics / concurrency-topology
+   ├── contracts/           # module-boundaries + data-model / interface / state-machine / failure-semantics / concurrency-topology
    └── traceability.md      # ADR → arc42 → behavior → contract matrix
    ```
 
+   Write **ADR-0001 = base architectural model**: either affirm the base model
+   (compact modules + public APIs) or record a deviation with its rationale.
+   Every later module ADR references the boundary it defines.
+
 5. **Fill each section**, working top-to-bottom and revisiting earlier sections
    as decisions land. Write one ADR per decision. Give each behavior scenario a
-   source ADR. Give each cross-cutting mechanism a precise contract.
+   source ADR. Give each cross-cutting mechanism a precise contract. Fill
+   `contracts/module-boundaries.md` with every module, its public API, and the
+   (acyclic, public-API-only) dependency graph.
 
 6. **Enforce the process rule:** every architectural change = new ADR → update
    the arc42 sections it touches. ADRs are immutable once accepted; supersede,
    never edit.
 
 7. **Verify against the Definition of Done** (architecture.md §10.3):
-   no `TBD`/placeholder remains, every ADR appears in §9, every §10.2 scenario
-   links a behavior contract, and the traceability matrix is complete.
+   no `TBD`/placeholder remains, every ADR appears in §9, every module has a
+   documented public API in `contracts/module-boundaries.md` and no
+   cross-module dependency reaches outside one, every §10.2 scenario links a
+   behavior contract, and the traceability matrix is complete.
 
 ## Templates
 
